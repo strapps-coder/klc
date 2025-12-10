@@ -3,6 +3,15 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>KamaLoka.Club</title>
+<script>
+function getURL(s) {
+    const h = window.location.protocol;
+    const d = window.location.hostname;
+    return h+s+'.'+d;
+}
+const p = 'h';
+const n = '4';
+</script>
 <style>
 html{
     font-family: sans-serif;
@@ -81,13 +90,6 @@ a {
 </div>
 <span id="footer">Click here if you are not redirect automatically.</span>
 <script>
-function getURL(s) {
-    const h = window.location.protocol;
-    const d = window.location.hostname;
-    return h+s+'.'+d;
-}
-const p = 'h';
-const n = '4';
 var countdownNumberEl = document.getElementById('countdown-number');
 var countdown = 5;
 countdownNumberEl.textContent = countdown;
