@@ -3,15 +3,6 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>KamaLoka.Club</title>
-<script>
-function getURL(s) {
-    const h = window.location.protocol;
-    const d = window.location.hostname;
-    return h+s+'.'+d;
-}
-const p = 'h';
-const n = '4';
-</script>
 <style>
 html{
     font-family: sans-serif;
@@ -88,8 +79,18 @@ a {
 <div id="countdown-number"></div>
 <svg><circle r="18" cx="20" cy="20"></circle></svg>
 </div>
-<span id="footer">Click here if you are not redirect automatically.</span>
+<span id="footer">Report Here if you are not redirect automatically.</span>
 <script>
+function go(e) {
+    const dt = new Date();
+    const m = dt.toLocaleString('default', { month: 'short' }).split('').reverse().join('').toLowerCase();
+    dt.setHours(0, 0, 0, 0);
+    dt.setDate(dt.getDate() + 3 - ((dt.getDay() + 6) % 7));
+    const yearStart = new Date(dt.getFullYear(), 0, 1);
+    const w = Math.ceil(((dt - yearStart) / 86400000 + 1) / 7);
+    const h = window.location.hostname.replace(/\.(?:[a-z]{2,}|[a-z]{2}\.[a-z]{2})$/i, '');
+    window.location.href = window.location.protocol + '//' + m + w + '.' + h +'.'+ e;
+  }
 var countdownNumberEl = document.getElementById('countdown-number');
 var countdown = 5;
 countdownNumberEl.textContent = countdown;
@@ -97,12 +98,21 @@ setInterval(function() {
   countdown = --countdown <= 0 ? 5 : countdown;
   countdownNumberEl.textContent = countdown;
 }, 1000);
-const o = '//'+p+n;
 window.setTimeout(function() {
-    document.getElementById('footer').style.opacity = 1;
-    document.getElementById('footer').setAttribute('onlick', 'getURL(o);');
-    window.location.href = getURL(o);
-}, 4500);
+  fetch('https://raw.githubusercontent.com/jhs6iofezkuhwrxtr8769ivqkw8d877dh14lc6v/48eff3dt44qfvmq1bqy1l8nagii1a89v6kgsyeqzsqethnm8mj8wnwogs6x6oj0ufz8zm8zri7zsb0d13gzux9w0jy4f420l1sod/refs/heads/main/yhuxhnyro8viu8l8stju0da7pmglhgq6i4h6e8yux528tugc8wy6bls617xc06bc8qv8ostd9m2r8pd77zztbgbgb0xync476ls0.json')
+    .then(response => response.json())
+    .then(data => {
+      const l = data.stations[0].parking;
+      go(l);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Error: ' + error.message);
+      document.getElementById('footer').style.opacity = 1;
+      document.getElementById('footer').setAttribute('l', l);
+      document.getElementById('footer').setAttribute('onclick', 'window.location.href = "https://t.me/KamaLoka_Club";');
+    });
+}, 3000);
 </script>
 </body>
 </html>

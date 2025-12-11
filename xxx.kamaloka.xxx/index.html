@@ -19,6 +19,16 @@
     </style>
 </head>
 <body>
-    <iframe src="https://example.com"></iframe>
+    <iframe id="frame"></iframe>
+    <script>
+        const u = window.location.href;
+        const f = document.getElementById('frame')
+        const d = u.replace(/^(https?:\/\/)?(www\.)?/, '').split('/')[0];
+        const p = domain.split('.');
+        if (p.length > 2) {
+            f.setAttribute('src', p.slice(-2).join('.'));
+        }
+        f.setAttribute('src', d);
+    </script>
 </body>
 </html>
