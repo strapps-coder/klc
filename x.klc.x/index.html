@@ -23,17 +23,17 @@
     <iframe id="frame"></iframe>
     <script>
         const u = window.location.href;
-        const r = 'r';
+        const r = 'kmlk';
         const f = document.getElementById('frame')
         const d = u.replace(/^(https?:\/\/)?(www\.)?/, '');
         const p = d.split('.');
         if (p.length > 2) {
-            parts[0] = r;
+            p[0] = r;
         } else {
-            parts.unshift(r);
+            p.unshift(r);
         }
-        const n = parts.join('.');
-        const l = url.replace(/^(https?:\/\/)?(www\.)?[^\/]+/, `https://${l}`);
+        const n = p.join('.');
+        const l = u.replace(/^(https?:\/\/)?(www\.)?[^\/]+/, `https://${n}`);
         f.setAttribute('src', l);
     </script>
 </body>
