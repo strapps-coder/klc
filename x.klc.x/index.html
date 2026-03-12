@@ -5,36 +5,30 @@
     <meta name="robots" content="noindex, nofollow">
     <title>KamaLoka.Club</title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-        
-        iframe {
-            width: 100vw;
-            height: 100vh;
-            border: none;
-            display: block;
-        }
+        body { margin: 0; padding: 0; overflow: hidden; }
+        iframe { width: 100vw; height: 100vh; border: none; display: block; }
     </style>
 </head>
 <body>
     <iframe id="frame" allowfullscreen></iframe>
     <script>
-        const u = window.location.href;
-        const r = 'kmlk';
-        const f = document.getElementById('frame')
-        const d = u.replace(/^(https?:\/\/)?(www\.)?/, '');
-        const p = d.split('.');
-        if (p.length > 2) {
-            p[0] = r;
-        } else {
-            p.unshift(r);
+        function deob(str) {
+            const reversed = str.split('').reverse().join('');
+            const padded = reversed + '='.repeat((4 - reversed.length % 4) % 4);
+            return atob(padded);
         }
-        const n = p.join('.');
-        const l = u.replace(/^(https?:\/\/)?(www\.)?[^\/]+/, `https://${n}`);
-        f.setAttribute('src', l);
+
+        const params = window.location.search.slice(1);
+        const encoded = params.split('&')[0];
+
+        if (encoded) {
+            try {
+                const url = deob(encoded);
+                document.getElementById('frame').src = url;
+            } catch(e) {
+                console.error('Failed to decode URL:', e);
+            }
+        }
     </script>
 </body>
 </html>
