@@ -122,7 +122,7 @@
 
           const timestamp = Date.now();
           const encoded = obfuscate(timestamp + '_' + window.location.protocol + '//' + 'edge.' + window.location.hostname);
-          window.location.href = destUrl + '/?' + encoded;
+          window.location.href = destUrl + '/#' + encoded;
         })
         .catch(error => {
           console.error('Error:', error);

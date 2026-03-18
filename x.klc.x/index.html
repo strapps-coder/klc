@@ -18,7 +18,18 @@
             return atob(padded);
         }
 
-        const params = window.location.search.slice(1);
+        function obfuscate(str) {
+            return btoa(str).split('').reverse().join('').replace(/=+$/, '');
+        }
+
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.url) {
+                const newEncoded = obfuscate(Date.now() + '_' + event.data.url);
+                history.replaceState(null, '', '#' + newEncoded);
+            }
+        });
+
+        const params = window.location.hash.slice(1);
         const encoded = params.split('&')[0];
 
         if (encoded) {
@@ -27,7 +38,7 @@
                 const sep = decoded.indexOf('_');
                 const timestamp = parseInt(decoded.substring(0, sep), 10);
                 const url = decoded.substring(sep + 1);
-                if (Date.now() - timestamp > 43200000) {
+                if (Date.now() - timestamp > 86400000) {
                     const parts = window.location.hostname.split('.');
                     window.location.href = window.location.protocol + '//' + parts[parts.length - 2] + '.club';
                 } else {
