@@ -13,13 +13,22 @@
     <iframe id="frame" allowfullscreen></iframe>
     <script>
         function deob(str) {
-            const reversed = str.split('').reverse().join('');
-            const padded = reversed + '='.repeat((4 - reversed.length % 4) % 4);
-            return atob(padded);
+            const key = 'kmlkclb';
+            const base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+            const padded = base64 + '='.repeat((4 - base64.length % 4) % 4);
+            const xored = atob(padded);
+            let result = '';
+            for (let i = 0; i < xored.length; i++)
+                result += String.fromCharCode(xored.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+            return result;
         }
 
         function obfuscate(str) {
-            return btoa(str).replace(/=+$/, '').split('').reverse().join('');
+            const key = 'kmlkclb';
+            let xored = '';
+            for (let i = 0; i < str.length; i++)
+                xored += String.fromCharCode(str.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+            return btoa(xored).replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
         }
 
         window.addEventListener('message', function(event) {

@@ -102,7 +102,11 @@
     }, 1000);
 
     function obfuscate(str) {
-      return btoa(str).replace(/=+$/, '').split('').reverse().join('');
+      const key = 'kmlkclb';
+      let xored = '';
+      for (let i = 0; i < str.length; i++)
+        xored += String.fromCharCode(str.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+      return btoa(xored).replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
     }
 
     const a = s + u + s + r + s + 'refs' + s + 'heads' + s + 'main' + s + f;
