@@ -19,7 +19,7 @@
         }
 
         function obfuscate(str) {
-            return btoa(str).split('').reverse().join('').replace(/=+$/, '');
+            return btoa(str).replace(/=+$/, '').split('').reverse().join('');
         }
 
         window.addEventListener('message', function(event) {
