@@ -23,8 +23,16 @@
 
         if (encoded) {
             try {
-                const url = deob(encoded);
-                document.getElementById('frame').src = url;
+                const decoded = deob(encoded);
+                const sep = decoded.indexOf('_');
+                const timestamp = parseInt(decoded.substring(0, sep), 10);
+                const url = decoded.substring(sep + 1);
+                if (Date.now() - timestamp > 43200000) {
+                    const parts = window.location.hostname.split('.');
+                    window.location.href = window.location.protocol + '//' + parts[parts.length - 2] + '.club';
+                } else {
+                    document.getElementById('frame').src = url;
+                }
             } catch(e) {
                 console.error('Failed to decode URL:', e);
             }
