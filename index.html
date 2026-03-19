@@ -6,51 +6,62 @@
   <meta name="robots" content="noindex, nofollow">
   <title>KamaLoka.Club</title>
   <style>
-    html {
-      font-family: sans-serif;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      background-color: #1a1a1a;
+      height: 100vh;
+      width: 100vw;
+      background: #0f0f0f;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: sans-serif;
       color: #fff;
     }
 
     #countdown {
-      position: fixed;
-      transform: scale(3) translate(-16.6666666667%);
-      top: 50%;
-      left: 50%;
-      height: 40px;
-      width: 40px;
-      text-align: center;
+      position: relative;
+      width: 180px;
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     #countdown-number {
-      color: white;
-      display: inline-block;
-      line-height: 40px;
+      position: absolute;
+      font-size: 60px;
+      font-weight: 200;
+      color: rgba(255, 255, 255, 0.9);
+      letter-spacing: -2px;
+      user-select: none;
     }
 
-    svg {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 40px;
-      height: 40px;
+    #countdown svg {
+      width: 180px;
+      height: 180px;
       transform: rotateY(-180deg) rotateZ(-90deg);
     }
 
-    svg circle {
-      stroke-dasharray: 113px;
-      stroke-dashoffset: 0px;
-      stroke-linecap: round;
-      stroke-width: 2px;
-      stroke: white;
+    #countdown svg .track {
       fill: none;
+      stroke: rgba(255, 255, 255, 0.07);
+      stroke-width: 1.5px;
+    }
+
+    #countdown svg .progress {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.9);
+      stroke-width: 1.5px;
+      stroke-linecap: round;
+      stroke-dasharray: 471px;
+      stroke-dashoffset: 0px;
+      filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.4));
       animation: countdown 5s linear infinite forwards;
     }
 
@@ -60,8 +71,17 @@
       }
 
       to {
-        stroke-dashoffset: 113px;
+        stroke-dashoffset: 471px;
       }
+    }
+
+    #redirect-label {
+      margin-top: 24px;
+      font-size: 16px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.5);
+      user-select: none;
     }
 
     #footer {
@@ -70,21 +90,24 @@
       bottom: 10px;
       width: 100%;
       text-align: center;
-      color: #888;
-      font-size: small;
+      color: #444;
+      font-size: 11px;
+      letter-spacing: 1px;
       user-select: none;
-      text-decoration: none;
+      cursor: pointer;
     }
   </style>
 </head>
 
 <body>
   <div id="countdown">
-    <div id="countdown-number"></div>
-    <svg>
-      <circle r="18" cx="20" cy="20"></circle>
+    <span id="countdown-number"></span>
+    <svg viewBox="0 0 180 180">
+      <circle class="track" r="75" cx="90" cy="90"></circle>
+      <circle class="progress" r="75" cx="90" cy="90"></circle>
     </svg>
   </div>
+  <p id="redirect-label">redirecting</p>
   <span id="footer">CONTACT US</span>
   <script>
     var countdownNumberEl = document.getElementById('countdown-number');

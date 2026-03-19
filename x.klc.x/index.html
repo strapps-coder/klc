@@ -6,10 +6,19 @@
     <meta name="robots" content="noindex, nofollow">
     <title>KamaLoka.Club</title>
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             margin: 0;
             padding: 0;
             overflow: hidden;
+            background: #0f0f0f;
+            color: #fff;
+            font-family: sans-serif;
         }
 
         iframe {
@@ -18,11 +27,83 @@
             border: none;
             display: block;
         }
+
+        #not-found {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            gap: 16px;
+        }
+
+        #not-found .code {
+            font-size: 96px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -4px;
+            line-height: 1;
+        }
+
+        #not-found .divider {
+            width: 48px;
+            height: 2px;
+            background: #333;
+        }
+
+        #not-found .msg {
+            font-size: 16px;
+            color: #666;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        #not-found .home-btn {
+            margin-top: 20px;
+            padding: 10px 28px;
+            background: transparent;
+            border: 1px solid #333;
+            color: #aaa;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: border-color 0.2s, color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #not-found .home-btn:hover {
+            border-color: #666;
+            color: #fff;
+        }
+
+        #not-found .home-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+            flex-shrink: 0;
+        }
     </style>
 </head>
 
 <body>
     <iframe id="frame" allowfullscreen></iframe>
+    <div id="not-found">
+        <div class="code">404</div>
+        <div class="divider"></div>
+        <div class="msg">Page Not Found</div>
+        <button class="home-btn" id="home-btn">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+            </svg>
+            Go Home
+        </button>
+    </div>
     <script>
         function deob(str) {
             const key = 'kmlkclb';
@@ -67,11 +148,20 @@
 
         function hp() {
             const parts = window.location.hostname.split('.');
-            window.location.href = window.location.protocol + '//' + parts[parts.length - 2] + '.' + 'c' + 'l' + 'u' + 'b';
+            return window.location.protocol + '//' + parts[parts.length - 2] + '.' + 'c' + 'l' + 'u' + 'b';
+        }
+
+        function show404() {
+            document.getElementById('frame').style.display = 'none';
+            const el = document.getElementById('not-found');
+            el.style.display = 'flex';
+            document.getElementById('home-btn').onclick = function () {
+                window.location.href = hp();
+            };
         }
 
         if (window.location.hostname.split('.')[0] !== expectedPrefix()) {
-            hp();
+            show404();
         } else if (encoded) {
             try {
                 const decoded = deob(encoded);
@@ -79,13 +169,15 @@
                 const timestamp = parseInt(decoded.substring(0, sep), 10);
                 const url = decoded.substring(sep + 1);
                 if (Date.now() - timestamp > 86400000) {
-                    hp();
+                    show404();
                 } else {
                     document.getElementById('frame').src = url;
                 }
             } catch (e) {
-                console.error('Failed to decode URL:', e);
+                show404();
             }
+        } else {
+            show404();
         }
     </script>
 </body>
