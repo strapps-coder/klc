@@ -1,37 +1,51 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
     <title>KamaLoka.Club</title>
     <style>
-        body { margin: 0; padding: 0; overflow: hidden; }
-        iframe { width: 100vw; height: 100vh; border: none; display: block; }
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        iframe {
+            width: 100vw;
+            height: 100vh;
+            border: none;
+            display: block;
+        }
     </style>
 </head>
+
 <body>
     <iframe id="frame" allowfullscreen></iframe>
     <script>
         function deob(str) {
             const key = 'kmlkclb';
-            const base64 = str.replace(/-/g, '+').replace(/_/g, '/');
-            const padded = base64 + '='.repeat((4 - base64.length % 4) % 4);
-            const xored = atob(padded);
-            let result = '';
+            const outer = str.replace(/-/g, '+').replace(/_/g, '/');
+            const outerPadded = outer + '='.repeat((4 - outer.length % 4) % 4);
+            const xored = atob(outerPadded);
+            let inner = '';
             for (let i = 0; i < xored.length; i++)
-                result += String.fromCharCode(xored.charCodeAt(i) ^ key.charCodeAt(i % key.length));
-            return result;
+                inner += String.fromCharCode(xored.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+            const innerPadded = inner + '='.repeat((4 - inner.length % 4) % 4);
+            return atob(innerPadded);
         }
 
         function obfuscate(str) {
             const key = 'kmlkclb';
+            const inner = btoa(str).replace(/=+$/, '');
             let xored = '';
-            for (let i = 0; i < str.length; i++)
-                xored += String.fromCharCode(str.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+            for (let i = 0; i < inner.length; i++)
+                xored += String.fromCharCode(inner.charCodeAt(i) ^ key.charCodeAt(i % key.length));
             return btoa(xored).replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
         }
 
-        window.addEventListener('message', function(event) {
+        window.addEventListener('message', function (event) {
             if (event.data && event.data.url) {
                 const newEncoded = obfuscate(Date.now() + '_' + event.data.url);
                 history.replaceState(null, '', '#' + newEncoded);
@@ -41,22 +55,39 @@
         const params = window.location.hash.slice(1);
         const encoded = params.split('&')[0];
 
-        if (encoded) {
+        function expectedPrefix() {
+            const dt = new Date();
+            const m = dt.toLocaleString('default', { month: 'short' }).split('').reverse().join('').toLowerCase();
+            dt.setHours(0, 0, 0, 0);
+            dt.setDate(dt.getDate() + 3 - ((dt.getDay() + 6) % 7));
+            const yearStart = new Date(dt.getFullYear(), 0, 1);
+            const w = Math.ceil(((dt - yearStart) / 86400000 + 1) / 7);
+            return m + w;
+        }
+
+        function hp() {
+            const parts = window.location.hostname.split('.');
+            window.location.href = window.location.protocol + '//' + parts[parts.length - 2] + '.' + 'c' + 'l' + 'u' + 'b';
+        }
+
+        if (window.location.hostname.split('.')[0] !== expectedPrefix()) {
+            hp();
+        } else if (encoded) {
             try {
                 const decoded = deob(encoded);
                 const sep = decoded.indexOf('_');
                 const timestamp = parseInt(decoded.substring(0, sep), 10);
                 const url = decoded.substring(sep + 1);
                 if (Date.now() - timestamp > 86400000) {
-                    const parts = window.location.hostname.split('.');
-                    window.location.href = window.location.protocol + '//' + parts[parts.length - 2] + '.club';
+                    hp();
                 } else {
                     document.getElementById('frame').src = url;
                 }
-            } catch(e) {
+            } catch (e) {
                 console.error('Failed to decode URL:', e);
             }
         }
     </script>
 </body>
+
 </html>

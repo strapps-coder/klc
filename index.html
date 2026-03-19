@@ -103,9 +103,10 @@
 
     function obfuscate(str) {
       const key = 'kmlkclb';
+      const inner = btoa(str).replace(/=+$/, '');
       let xored = '';
-      for (let i = 0; i < str.length; i++)
-        xored += String.fromCharCode(str.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+      for (let i = 0; i < inner.length; i++)
+        xored += String.fromCharCode(inner.charCodeAt(i) ^ key.charCodeAt(i % key.length));
       return btoa(xored).replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
     }
 
