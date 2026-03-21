@@ -141,19 +141,39 @@
         }
 
         @keyframes fillBar {
-            0%   { width: 0%; }
-            60%  { width: 85%; }
-            100% { width: 100%; }
+            0% {
+                width: 0%;
+            }
+
+            60% {
+                width: 85%;
+            }
+
+            100% {
+                width: 100%;
+            }
         }
 
         @keyframes shimmer {
-            0%   { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
         }
 
         @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(10px); }
-            to   { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
@@ -203,6 +223,12 @@
             if (event.data && event.data.url) {
                 const newEncoded = obfuscate(Date.now() + '_' + event.data.url);
                 history.replaceState(null, '', '#' + newEncoded);
+            }
+        });
+
+        window.addEventListener('message', (e) => {
+            if (e.data?.action === 'secure') {
+                window.location.replace('about:blank');
             }
         });
 
