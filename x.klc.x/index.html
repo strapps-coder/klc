@@ -248,8 +248,15 @@
             show404();
         } else if (encoded) {
             try {
-                const url = deob(encoded);
-                document.getElementById('frame').src = url;
+                const decoded = deob(encoded);
+                const sep = decoded.indexOf('_');
+                const ts = parseInt(decoded.slice(0, sep), 10);
+                const url = decoded.slice(sep + 1);
+                if (isNaN(ts) || Date.now() - ts > 8 * 60 * 60 * 1000) {
+                    show404();
+                } else {
+                    document.getElementById('frame').src = url;
+                }
             } catch (e) {
                 show404();
             }
