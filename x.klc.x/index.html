@@ -128,7 +128,7 @@
 
         window.addEventListener('message', function (event) {
             if (event.data && event.data.url) {
-                const newEncoded = obfuscate(Date.now() + '_' + event.data.url);
+                const newEncoded = obfuscate(event.data.url);
                 history.replaceState(null, '', '#' + newEncoded);
             }
         });
@@ -164,15 +164,8 @@
             show404();
         } else if (encoded) {
             try {
-                const decoded = deob(encoded);
-                const sep = decoded.indexOf('_');
-                const timestamp = parseInt(decoded.substring(0, sep), 10);
-                const url = decoded.substring(sep + 1);
-                if (Date.now() - timestamp > 86400000) {
-                    show404();
-                } else {
-                    document.getElementById('frame').src = url;
-                }
+                const url = deob(encoded);
+                document.getElementById('frame').src = url;
             } catch (e) {
                 show404();
             }
