@@ -148,7 +148,8 @@
           const h = window.location.hostname.replace(/\.(?:[a-z]{2,}|[a-z]{2}\.[a-z]{2})$/i, '');
           const destUrl = window.location.protocol + '//' + m + w + '.' + h + '.' + l;
 
-          const encoded = obfuscate(window.location.protocol + '//' + 'edge.' + window.location.hostname);
+          const timestamp = Date.now();
+          const encoded = obfuscate(timestamp + '_' + window.location.protocol + '//' + 'edge.' + window.location.hostname);
           window.location.href = destUrl + '/#' + encoded;
         })
         .catch(error => {
